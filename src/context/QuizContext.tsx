@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useContext, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../Store.tsx";
-import axios, { AxiosResponse } from "axios";
+import supabase from "../services/supabase.ts";
 import { failed, received } from "../features/QuizSlice.ts";
 
 interface Question {
@@ -29,17 +29,22 @@ function QuizProvider({ children }: { children: ReactNode }) {
   const { questions, status, index, answer, points, highScore, timeRemaining } =
     useAppSelector((state) => state.quiz);
 
-  const numQuestions = questions.length;
-  const maxPoints = questions.reduce(
+  const numQuestions: number = questions.length;
+  const maxPoints: number = questions.reduce(
     (acc, question) => acc + question.points,
     0,
   );
 
   useEffect(() => {
-    axios
-      .get("http://localhost:1337/questions")
-      .then((response: AxiosResponse) => dispatch(received(response.data)))
-      .catch(() => dispatch(failed()));
+    const fetchData = async () => {
+      const { data, error } = await supabase.from("questions").select("*");
+      if (error) {
+        dispatch(failed());
+        return;
+      }
+      dispatch(received(data));
+    };
+    fetchData();
   }, [dispatch]);
 
   return (
