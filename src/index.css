@@ -268,9 +268,7 @@ progress {
   }
 
   h1 {
-    font-family: "Codystar";
     font-size: 5.0rem;
-    text-align: center;
   }
 }
 
@@ -289,6 +287,23 @@ progress {
 @media (max-width: 28rem) {
   html {
     font-size: 43.75%;
+  }
+
+  .app-header {
+    gap: 10px;
+    justify-content: center;
+  }
+
+  img {
+    width: 10rem;
+  }
+
+  h1 {
+    font-size: 4.8rem;
+  }
+
+  .main {
+    width: 40rem;
   }
 }
 
